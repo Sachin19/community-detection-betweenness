@@ -14,276 +14,276 @@
 using namespace std;
 
 struct component{
-	double dleft;
-	double dright;
-	vector<int> leftComp;
-	vector<int> rightComp;
+    double dleft;
+    double dright;
+    vector<int> leftComp;
+    vector<int> rightComp;
 };
 
 
 class Graph
 {
-	private:
-		int V;
-		int L;
-		int N;
-		vector< vector<int> > adj;
-		vector< bool > deleted;
-	public:
-		Graph(int v, int l) {
-			V = v*l;
-			L = l;
-			N = v;
-			adj.resize(V);
-			deleted.resize(V);
-			for(int i=0; i<V; i++) {
-				deleted[i] = false;
-			}
-			//cout<<deleted.size()<<"\n";
-		}
-		Graph(const Graph &g) {
-			this->V = g.V;
-			this->adj = g.adj;
-		}
-		void addEdge(pair<int,int> edge) {
-			adj[edge.first].push_back(edge.second);
-			adj[edge.second].push_back(edge.first);
-		}
-		void printGraph() {
-			for(int i=0;i<V;i++) {
-				if(isDeleted(i)){
-					continue;
-				}
-				cout << i <<": ";
-				for (int j = 0; j < adj[i].size(); j++) {
-					cout<<adj[i][j]<<" ";
-				}
-				cout<<"\n";
-			}
-		}
-		vector<int> getNeighbours(int i) {
-			return adj[i];
-		}
-		bool isEmpty(){
-			//cout<<V;
-			for (int i = 0; i < V; ++i)
-			{
-				//cout<<deleted[i];
-				if(!deleted[i]){
+    private:
+        int V;
+        int L;
+        int N;
+        vector< vector<int> > adj;
+        vector< bool > deleted;
+    public:
+        Graph(int v, int l) {
+            V = v*l;
+            L = l;
+            N = v;
+            adj.resize(V);
+            deleted.resize(V);
+            for(int i=0; i<V; i++) {
+                deleted[i] = false;
+            }
+            //cout<<deleted.size()<<"\n";
+        }
+        Graph(const Graph &g) {
+            this->V = g.V;
+            this->adj = g.adj;
+        }
+        void addEdge(pair<int,int> edge) {
+            adj[edge.first].push_back(edge.second);
+            adj[edge.second].push_back(edge.first);
+        }
+        void printGraph() {
+            for(int i=0;i<V;i++) {
+                if(isDeleted(i)){
+                    continue;
+                }
+                cout << i <<": ";
+                for (int j = 0; j < adj[i].size(); j++) {
+                    cout<<adj[i][j]<<" ";
+                }
+                cout<<"\n";
+            }
+        }
+        vector<int> getNeighbours(int i) {
+            return adj[i];
+        }
+        bool isEmpty(){
+            //cout<<V;
+            for (int i = 0; i < V; ++i)
+            {
+                //cout<<deleted[i];
+                if(!deleted[i]){
 
-					return false;
-				}
-			}
-			return true;
-		}
-		bool isDeleted(int i){
-			return deleted[i];
-		}
-		double getDegree(int i) {
-			return (double) adj[i].size();
-		}
-		void removeEdge(pair<int,int> edge) {
-			adj[edge.first].erase(remove(adj[edge.first].begin(), adj[edge.first].end(), edge.second), adj[edge.first].end());
-			adj[edge.second].erase(remove(adj[edge.second].begin(), adj[edge.second].end(), edge.first), adj[edge.second].end());
-		}
-		bool isEdgePresent(pair<int,int> edge) {
-			//cout << "looking for edge between : "<< edge.first<<","<<edge.second<<"\n";
-			std::vector<int>::iterator it,it2;
-			it = find(adj[edge.first].begin(),adj[edge.first].end(),edge.second);
-			//it2 = find(adj[edge.second].begin(),adj[edge.second].end(),edge.first);
-			if(it!=adj[edge.first].end()  ) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		int numNodes() {
-			int ans = 0;
+                    return false;
+                }
+            }
+            return true;
+        }
+        bool isDeleted(int i){
+            return deleted[i];
+        }
+        double getDegree(int i) {
+            return (double) adj[i].size();
+        }
+        void removeEdge(pair<int,int> edge) {
+            adj[edge.first].erase(remove(adj[edge.first].begin(), adj[edge.first].end(), edge.second), adj[edge.first].end());
+            adj[edge.second].erase(remove(adj[edge.second].begin(), adj[edge.second].end(), edge.first), adj[edge.second].end());
+        }
+        bool isEdgePresent(pair<int,int> edge) {
+            //cout << "looking for edge between : "<< edge.first<<","<<edge.second<<"\n";
+            std::vector<int>::iterator it,it2;
+            it = find(adj[edge.first].begin(),adj[edge.first].end(),edge.second);
+            //it2 = find(adj[edge.second].begin(),adj[edge.second].end(),edge.first);
+            if(it!=adj[edge.first].end()  ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        int numNodes() {
+            int ans = 0;
 
-			for (int i = 0; i < N*L; ++i) {
-				if(!deleted[i])
-				ans++;
-			}
-			
-			return ans;
-		}
-		int numEdges() {
-			int edges = 0;
-			
-			for(int i=0;i<adj.size();i++)
-				if(!deleted[i])
-					edges+=adj[i].size();
-			
-			return edges/2;
-		}
+            for (int i = 0; i < N*L; ++i) {
+                if(!deleted[i])
+                ans++;
+            }
+            
+            return ans;
+        }
+        int numEdges() {
+            int edges = 0;
+            
+            for(int i=0;i<adj.size();i++)
+                if(!deleted[i])
+                    edges+=adj[i].size();
+            
+            return edges/2;
+        }
 
-		void removeSubgraphFromAllLevels(vector<int> nodes) {
-			//cout << "Removing : " << nodes.size() << "\n";
-			for(int l = 0; l < L; l++) {				
-				for(int i = 0; i < adj.size(); i++) {
-					for(int j = 0; j < nodes.size(); j++) {
-						adj[i].erase(remove(adj[i].begin(), adj[i].end(), nodes[i]+l*N), adj[i].end());
-					}
-				}
-				for(int i = 0; i < nodes.size(); i++) {
-					//cout << "deleting " << nodes[i]<<" "<<nodes[i]%N + l*N<<"\n";
-					deleted[nodes[i]+l*N] = true;
-				}
-			}			
-		}
+        void removeSubgraphFromAllLevels(vector<int> nodes) {
+            //cout << "Removing : " << nodes.size() << "\n";
+            for(int l = 0; l < L; l++) {                
+                for(int i = 0; i < adj.size(); i++) {
+                    for(int j = 0; j < nodes.size(); j++) {
+                        adj[i].erase(remove(adj[i].begin(), adj[i].end(), nodes[i]+l*N), adj[i].end());
+                    }
+                }
+                for(int i = 0; i < nodes.size(); i++) {
+                    //cout << "deleting " << nodes[i]<<" "<<nodes[i]%N + l*N<<"\n";
+                    deleted[nodes[i]+l*N] = true;
+                }
+            }           
+        }
 };
 
+/*this function calculates the betweenness centrality of each node in the network
+input:  instance of Graph (g)
+        number of nodes in one layer (n)
+        number of layes (l)
+*/
 vector<double> betweennessCentralityNodes(Graph &g, int n, int l) {
+    vector<double> Cb(n,0.0);
 
+    double *sigma = new double[n*l];
+    double *sigmaM = new double[n];
+    int *D = new int[n*l];
+    int *Dm = new int[n*l];
+    vector< set<int> > Vsame(n);
+    
+    for (int i = 0; i < n; i++)
+    {
+        if(g.isDeleted(i)){
+            continue;
+        }
 
-	vector<double>Cb(n,0.0);
+        if(i%1000 == 0)
+            cout << i << endl;
+        memset(sigma, 0, n*l*sizeof(double));
+        memset(sigmaM, 0, n*sizeof(double));
+        memset(D, -1, n*l*sizeof(int));
+        memset(Dm, -1, n*l*sizeof(int));
+        queue<int> Q;
+        stack<int>S;
+        Vsame.resize(n, set<int>());
+        map<int, vector<int> > P;
 
-	
-	
-	double *sigma = new double[n*l];
-	double *sigmaM = new double[n];
-	int *D = new int[n*l];
-	int *Dm = new int[n*l];
-	vector< vector<int> > Vsame(n);
-	
+        Q.push(i);
 
+        for (int j = i; j < n*l; j += n)
+        {
+            sigma[j] = 1.0;
+        }
 
-	for (int i = 0; i < n; i++)
-	{
-		if(g.isDeleted(i)){
-			continue;
-		}
-		if(i%100 == 0)
-			cout << i <<"\n";
-		memset(sigma, 0, n*l*sizeof(double));
-		memset(sigmaM, 0, n*sizeof(double));
-		memset(D, -1, n*l*sizeof(int));
-		memset(Dm, -1, n*l*sizeof(int));
-		Vsame.clear();
-		queue<int> Q;
-		stack<int>S;
-		vector< stack<int> > P(n*l);
+        for (int j = i; j < n*l; j += n)
+        {
+            D[j] = 0;
+        }
 
+        for (int j = i; j < n*l; j += n)
+        {
+            Dm[j] = 0;
+        }
 
-		// fill(P.begin(), P.end(), stack<int>());
+        while(!Q.empty()) {
+            int v = Q.front();
+            Q.pop();
+            if(g.isDeleted(v))
+                continue;   
 
-		for (int j = i; j < n*l; j += n)
-		{
-			sigma[j] = 1.0;
-		}
+            S.push(v);
 
-		for (int j = i; j < n*l; j += n)
-		{
-			D[j] = 0;
-		}
+            if(v!=i) {
+                vector<int> vNeighbours = g.getNeighbours(v);
+                for(int j=0;j<vNeighbours.size();j++) {
+                    //W.insert(vNeighbours[j]);
 
-		for (int j = i; j < n*l; j += n)
-		{
-			Dm[j] = 0;
-		}
+                    int w = vNeighbours[j];
+                    if(P.count(w) == 0) {
+                        P[w] = vector<int>();
+                    }
+                    if(D[w] < 0) {
+                        Q.push(w);
+                        D[w] = D[v] + 1;
 
-		//fill(Vsame.begin(),Vsame.end(),vector<int>());
-		Q.push(i);
+                        if(Dm[w%n] < 0 || Dm[w%n] == D[w]) {
+                            Dm[w%n] = D[w];
+                            Vsame[w%n].insert(w);
+                        }
+                    }
+                    if(D[w] == D[v] + 1) {
+                        sigma[w] += sigma[v];
+                        sigmaM[w%n] += sigma[v];
+                        P[w].push_back(v);
+                    }
 
-		while(!Q.empty()) {
-			int v = Q.front();
-			Q.pop();
-			if(g.isDeleted(v))
-				continue;	
+                }
+            }
+            else {
+                for (int j = i; j < n*l; j += n)
+                {
+                    vector<int> jNeighbours = g.getNeighbours(j);
+                    for(int k=0;k<jNeighbours.size();k++) {
 
-			S.push(v);
+                        int w = jNeighbours[k];
+                        if(P.count(w) == 0) {
+                            P[w] = vector<int>();
+                        }
+                        if(D[w] < 0) {
+                            Q.push(w);
+                            D[w] = D[v] + 1;
 
-			if(v!=i) {
-				vector<int> vNeighbours = g.getNeighbours(v);
-				for(int j=0;j<vNeighbours.size();j++) {
-					//W.insert(vNeighbours[j]);
+                            if(Dm[w%n] < 0 || Dm[w%n] == D[w]) {
+                                Dm[w%n] = D[w];
+                                Vsame[w%n].insert(w);
+                            }
+                        }
+                        if(D[w] == D[v] + 1) {
+                            sigma[w] += sigma[v];
+                            sigmaM[w%n] += sigma[v];
+                            P[w].push_back(v);
+                        }
+                    }
+                }
+            }
+        }
 
-					int w = vNeighbours[j];
-					if(D[w] < 0) {
-						Q.push(w);
-						D[w] = D[v] + 1;
+        //following piece of code is not required anymore.
+        // cout << "donebfs\n";
+        // for(int w =0; w<n; w++) {
+        //  sigmaM[w] = 0.0;
+        //  for(int j=0; j<Vsame[w].size(); j++) {
+        //      int v = Vsame[w][j];
+        //      sigmaM[w] += sigma[v];
+        //  }
+        // }
 
-						if(Dm[w%n] < 0 || Dm[w%n] == D[w]) {
-							Dm[w%n] = D[w];
-							Vsame[w%n].push_back(w);
-						}
-					}
-					if(D[w] == D[v] + 1) {
-						sigma[w] += sigma[v];
-						P[w].push(v);
-					}
+        vector<double> delta(n*l,0.0);       
 
-				}
-			}
-			else {
-				for (int j = i; j < n*l; j += n)
-				{
-					vector<int> jNeighbours = g.getNeighbours(j);
-					for(int k=0;k<jNeighbours.size();k++) {
-						//W.insert(jNeighbours[k]);
+        while(!S.empty()) {
+            int w = S.top();
+            S.pop();
 
-						int w = jNeighbours[k];
-						if(D[w] < 0) {
-							Q.push(w);
-							D[w] = D[v] + 1;
+            for( int ll = 0; ll < P[w].size(); ll++) {
+                int v = P[w][ll];
 
-							if(Dm[w%n] < 0 || Dm[w%n] == D[w]) {
-								Dm[w%n] = D[w];
-								Vsame[w%n].push_back(w);
-							}
-						}
-						if(D[w] == D[v] + 1) {
-							sigma[w] += sigma[v];
-							P[w].push(v);
-						}
-					}
-				}
-			}
-		}
+                if(Vsame[w%n].find(w) != Vsame[w%n].end()) {
+                    if(sigma[w] > 0 && sigmaM[w%n]>0)
+                        delta[v] += (1-gamma)*(sigma[v]/sigma[w])*((sigma[w]/sigmaM[w%n]) + delta[w]);
+                }
+                else {
+                    if(sigma[w] > 0 && sigmaM[w%n]>0)
+                        delta[v] += gamma*(sigma[v]/sigma[w])*delta[w];
+                }
+                if(w!=i) {
+                    Cb[w%n] += delta[w];
+                }
+            }
+        }
+    }
 
-		// cout << "donebfs\n";
-		// for(int w =0; w<n; w++) {
-		// 	sigmaM[w] = 0.0;
-		// 	for(int j=0; j<Vsame[w].size(); j++) {
-		// 		int v = Vsame[w][j];
-		// 		sigmaM[w] += sigma[v];
-		// 	}
-		// }
-
-		// vector<double> delta(n*l,0.0);		
-
-		// while(!S.empty()) {
-		// 	int w = S.top();
-		// 	S.pop();
-
-		// 	while(!P[w].empty()) {
-		// 		int v = P[w].top();
-		// 		P[w].pop();
-
-		// 		vector<int>::iterator p;
-		// 		p = find(Vsame[w%n].begin(),Vsame[w%n].end(),w);
-
-		// 		if(p != Vsame[w%n].end()) {
-		// 			if(sigma[w] > 0 && sigmaM[w%n]>0)
-		// 				delta[v] += (1-gamma)*(sigma[v]/sigma[w])*((sigma[w]/sigmaM[w%n]) + delta[w]);
-		// 		}
-		// 		else {
-		// 			if(sigma[w] > 0 && sigmaM[w%n]>0)
-		// 				delta[v] += gamma*(sigma[v]/sigma[w])*delta[w];
-		// 		}
-		// 		if(w!=i) {
-		// 			Cb[w%n] += delta[w];
-		// 		}
-		// 	}
-		// }
-	}
-
-	return Cb;
+    return Cb;
 }
 
 int main(int argc, char const *argv[]) {
-	int numNodes, numSlice;
+    int numNodes, numSlice;
     numNodes = atoi(argv[1]);
     numSlice = atoi(argv[2]);
 
@@ -318,9 +318,11 @@ int main(int argc, char const *argv[]) {
 
         fin.close();
     }
-	
+    
     vector<double> Cb = betweennessCentralityNodes(singleSliceGraph,numNodes,1);
 
     for(int i=0;i<Cb.size();i++)
-    	cout<<Cb[i]<<"\n";
+        if(Cb[i] > 0) {
+            cout<<i << ": " <<Cb[i]<<"\n";
+        }
 }

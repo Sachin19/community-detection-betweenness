@@ -281,7 +281,7 @@ class Graph
 // 	return Cb;
 // }
 
-//function improved. working atleast 100 times faster. \m/
+//function improved. Working faster than the above commented code
 vector<double> betweennessCentralityNodes(Graph &g, int n, int l) {
     vector<double> Cb(n,0.0);
 
@@ -395,7 +395,6 @@ vector<double> betweennessCentralityNodes(Graph &g, int n, int l) {
         //      sigmaM[w] += sigma[v];
         //  }
         // }
-        //useless code ends here
 
         vector<double> delta(n*l,0.0);       
 
@@ -462,16 +461,16 @@ pair<int, int> topBetweennessCentralityInEdges(Graph &g, vector<double> Cb, int 
                 continue;
             vector<int> jNeighbours = g.getNeighbours(iNeighbours[j]);
 
-            //vector<int> commonNeighbours(n);
-            // vector<int> kNeighbours = iNeighbours;
-            // sort(kNeighbours.begin(), kNeighbours.end());
-            // sort(jNeighbours.begin(), jNeighbours.end());
+            /*vector<int> commonNeighbours(n);
+            vector<int> kNeighbours = iNeighbours;
+            sort(kNeighbours.begin(), kNeighbours.end());
+            sort(jNeighbours.begin(), jNeighbours.end());
             
-            // std::vector<int>::iterator it;
-            // it = std::set_intersection (kNeighbours.begin(), kNeighbours.end(), jNeighbours.begin(),
-            //                             jNeighbours.end(), commonNeighbours.begin());
+            std::vector<int>::iterator it;
+            it = std::set_intersection (kNeighbours.begin(), kNeighbours.end(), jNeighbours.begin(),
+                                        jNeighbours.end(), commonNeighbours.begin());
 
-            //commonNeighbours.resize(it - commonNeighbours.begin());
+            commonNeighbours.resize(it - commonNeighbours.begin());*/
             cnbrs = commonElements(iNeighbours, jNeighbours);
 
             double di = g.getDegree(i);
@@ -488,7 +487,7 @@ pair<int, int> topBetweennessCentralityInEdges(Graph &g, vector<double> Cb, int 
         }
     }
 
-    cout << e1 << ", " << e2 << ": " << maxCentrality << "\n";
+    //cout << e1 << ", " << e2 << ": " << maxCentrality << "\n";
     return make_pair(e1, e2);
 }
 
@@ -616,8 +615,6 @@ vector< vector<int> >getCommunities(Graph &singleSliceGraph, Graph &g, int n, in
 
         if (topEdge.first == -1 && topEdge.second == -1)
         {
-            //singleSliceGraph.printGraph();
-            cout << "g: " << g.numEdges() << "  " << g.numNodes() << "\n";
             break;
         }
         //cout << "NODES: " << topEdge.first << " " << topEdge.second <<"\n";
@@ -707,14 +704,14 @@ int main(int argc, char const *argv[])
     // cout << "\n\n";
 
     vector< vector<int> > communities = getCommunities(singleSliceGraph, g, numNodes, numSlice);
-    cout << "Number of communities" << communities.size() << "\n";
+    cout << "Number of communities: " << communities.size() << "\n";
     for (int i = 0; i < communities.size(); i++)
     {
         for (int j = 0; j < communities[i].size(); j++)
         {
             cout << communities[i][j] << " ";
         }
-        cout << "\n\n";
+        cout << "\n";
     }
 
 
